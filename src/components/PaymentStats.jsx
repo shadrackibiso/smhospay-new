@@ -16,7 +16,7 @@ function PaymentStats(props) {
                   <FaHandHoldingUsd />
                 </div>
               </div>
-              <div className="col-lg-8">
+              <div className="col-lg-8 d-flex align-items-center align-items-md-start flex-column">
                 <h4 className="statsCardHeading">
                   ₦{numeral(props.totalGivings).format("0,0")}
                 </h4>
@@ -34,7 +34,7 @@ function PaymentStats(props) {
                   <FaHandHoldingUsd />
                 </div>
               </div>
-              <div className="col-lg-8">
+              <div className="col-lg-8 d-flex align-items-center align-items-md-start flex-column">
                 <h4 className="statsCardHeading statsCarHeadingSmall">
                   ₦{numeral(props.totalTithes).format("0,0")}
                 </h4>
@@ -52,7 +52,7 @@ function PaymentStats(props) {
                   <FaHandHoldingUsd />
                 </div>
               </div>
-              <div className="col-lg-8">
+              <div className="col-lg-8 d-flex align-items-center align-items-md-start flex-column">
                 <h4 className="statsCardHeading statsCarHeadingSmall">
                   ₦{numeral(props.totalOfferings).format("0,0")}
                 </h4>
@@ -70,7 +70,7 @@ function PaymentStats(props) {
                   <FaHandHoldingUsd />
                 </div>
               </div>
-              <div className="col-lg-8">
+              <div className="col-lg-8 d-flex align-items-center align-items-md-start flex-column">
                 <h4 className="statsCardHeading statsCarHeadingSmall">
                   ₦{numeral(props.totalOthers).format("0,0")}
                 </h4>

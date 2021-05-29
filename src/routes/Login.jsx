@@ -3,7 +3,7 @@ import { NavLink, Redirect } from "react-router-dom";
 import fb from "../config/config";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import logo from "../images/logo.svg";
+// import logo from "../images/logo.svg";
 import ReactLoading from "react-loading";
 
 function Login(props) {
@@ -39,16 +39,16 @@ function Login(props) {
       <div className="signUpContainer">
         <div className="container">
           <div className="row d-flex flex-column align-items-center justify-content-center">
-            <div>
+            {/* <div>
               <img src={logo} width="150px" className="mb-5" />
-            </div>
+            </div> */}
             {/* FORM */}
-            <div className="col-lg-4 signUpFormContainer">
+            <div className="col-lg-5 signUpFormContainer">
               <form
                 className="signUpForm loginForm text-center"
                 onSubmit={login}
               >
-                <h3 className="font-weight-bold mb-5">Login To Your Account</h3>
+                <h3 className="font-weight-bold mb-5">Sign In</h3>
                 <input
                   type="text"
                   name="email"

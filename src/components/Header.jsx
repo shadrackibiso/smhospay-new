@@ -13,12 +13,12 @@ function Header(props) {
           <div className="row justify-content-between no-gutters align-items-center">
             {/* title */}
             <div>
-              <h4 className="font-weight-bold">{props.title}</h4>
+              <h4 className="font-weight-bold headerTitle">{props.title}</h4>
             </div>
             {/* avatar */}
             <div className="profilePic" onClick={() => setDisplayModal(true)}>
               <div className="profilePicText">
-                {props.firstName.slice(0, 1)}
+                {props.firstName && props.firstName.slice(0, 1)}
               </div>
             </div>
           </div>
