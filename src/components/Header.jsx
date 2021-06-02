@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import avatar from "../images/avatar.jpg";
 import ProfileModal from "../components/ProfileModal";
 
 function Header(props) {
@@ -13,7 +12,9 @@ function Header(props) {
           <div className="row justify-content-between no-gutters align-items-center">
             {/* title */}
             <div>
-              <h4 className="font-weight-bold headerTitle">{props.title}</h4>
+              <h4 className="font-weight-bold headerTitle mb-0">
+                {props.title}
+              </h4>
             </div>
             {/* avatar */}
             <div className="profilePic" onClick={() => setDisplayModal(true)}>

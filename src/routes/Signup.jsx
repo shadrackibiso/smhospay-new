@@ -3,9 +3,9 @@ import { NavLink, Redirect } from "react-router-dom";
 import fb from "../config/config";
 import firebase from "firebase/app";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 // import logo from "../images/logo.svg"
 import ReactLoading from "react-loading";
+import "react-toastify/dist/ReactToastify.css";
 
 function Signup(props) {
   const [redirect, setRedirect] = useState(false);

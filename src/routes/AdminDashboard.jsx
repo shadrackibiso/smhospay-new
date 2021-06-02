@@ -4,15 +4,13 @@ import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import MobileNav from "../components/MobileNav";
 import PayForm from "../components/PayForm";
+// import {NavLink, Redirect} from 'react-router-dom'
 import PaymentStats from "../components/PaymentStats";
 import RecentPayments from "../components/RecentPayments";
 import { CircleSpinner } from "react-spinners-kit";
-import { Redirect } from "react-router-dom";
 
-function Dashboard(props) {
-  return props.accountType && props.accountType.toLowerCase() === "admin" ? (
-    <Redirect to="/adminDashboard" />
-  ) : (
+function AdminDashboard(props) {
+  return (
     <>
       <div className="pageContainer">
         {/* SIDEBAR */}
@@ -68,4 +66,4 @@ function Dashboard(props) {
   );
 }
 
-export default Dashboard;
+export default AdminDashboard;

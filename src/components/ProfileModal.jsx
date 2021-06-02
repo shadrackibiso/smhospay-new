@@ -1,13 +1,11 @@
 import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
-import avatar from "../images/avatar.jpg";
 import fb from "../config/config";
 
 function ProfileModal(props) {
   const [redirect, setRedirect] = useState(false);
   const logOut = () => {
     fb.auth().signOut().then(localStorage.clear("user"));
-
     setRedirect(true);
   };
 
@@ -18,8 +16,10 @@ function ProfileModal(props) {
         className="modalContainer"
         style={{ display: !props.showProfileModal && "none" }}
       >
+        {/* MODAL BACKDROP */}
         <div className="backdrop" onClick={props.closeModal}></div>
-        <div className="modalContent p-4 py-5 d-flex align-items-center justify-content-center flex-column text-center">
+        {/* MODAL CONTENT */}
+        <div className="modalContent p-4 py-5 d-flex align-items-center justify-content-center flex-column text-center animate__animated animate__zoomIn">
           <div className="profileModal profilePic">
             <div className="profilePicText">
               {props.firstName && props.firstName.slice(0, 1)}

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { AiOutlineHome, AiOutlineHistory } from "react-icons/ai";
+import { MdReceipt, MdDashboard } from "react-icons/md";
 import logo from "../images/logo.svg";
 
 function Sidebar(props) {
@@ -9,7 +9,7 @@ function Sidebar(props) {
   return (
     <div className="sidebar d-none d-lg-block">
       <div className="sidebarHeader">
-        <img src={logo} width="150px" />
+        <img src={logo} width="120px" />
       </div>
       <div className="fullHeight sidebarNavContainer">
         {/* HOME */}
@@ -20,22 +20,22 @@ function Sidebar(props) {
             }
           >
             <div className="sidebarNavIcon">
-              <AiOutlineHome />
+              <MdDashboard />
             </div>
-            <div className="sidebarNavText">home</div>
+            <div className="sidebarNavText">Dashboard</div>
           </div>
         </NavLink>
-        {/* TRANSACTIONS */}
-        <NavLink to="/transactions">
+        {/* PAYMENTS */}
+        <NavLink to="/payments">
           <div
             className={
-              props.page === "transactions" ? "sidebarNav active" : "sidebarNav"
+              props.page === "payments" ? "sidebarNav active" : "sidebarNav"
             }
           >
             <div className="sidebarNavIcon">
-              <AiOutlineHistory />
+              <MdReceipt />
             </div>
-            <div className="sidebarNavText">transactions</div>
+            <div className="sidebarNavText">payments</div>
           </div>
         </NavLink>
       </div>

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { NavLink, Redirect } from "react-router-dom";
-import fb from "../config/config";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-// import logo from "../images/logo.svg";
+import fb from "../config/config";
+import logo from "../images/logo-l.png";
 import ReactLoading from "react-loading";
+import "react-toastify/dist/ReactToastify.css";
 
 function Login(props) {
   const [redirect, setRedirect] = useState(false);
@@ -39,11 +39,11 @@ function Login(props) {
       <div className="signUpContainer">
         <div className="container">
           <div className="row d-flex flex-column align-items-center justify-content-center">
-            {/* <div>
-              <img src={logo} width="150px" className="mb-5" />
-            </div> */}
             {/* FORM */}
             <div className="col-lg-5 signUpFormContainer">
+              <div>
+                <img src={logo} width="150px" className="mb-5" />
+              </div>
               <form
                 className="signUpForm loginForm text-center"
                 onSubmit={login}

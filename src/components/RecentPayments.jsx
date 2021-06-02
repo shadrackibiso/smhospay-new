@@ -1,16 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import "../css/home.css";
 import { FaHandHoldingUsd } from "react-icons/fa";
 import numeral from "numeral";
 import moment from "moment";
 import empty from "../images/empty.svg";
 import { ClassicSpinner } from "react-spinners-kit";
+import { Link } from "react-router-dom";
+import PaymentPanel from "./PaymentPanel";
 
-function RecentTransactions(props) {
+function RecentPayments(props) {
+  const [displayPaymentPanel, setDisplayPaymentPanel] = useState(false);
+  const [selectedPayment, setSelectedPayment] = useState(null);
+
+  const showPayment = (props) => {
+    setSelectedPayment(props);
+    setDisplayPaymentPanel(true);
+  };
+
   return (
     <>
       <div className="row justify-content-between no-gutters align-items-center">
-        <h5 className="font-weight-bold panelTitle">Recent Transactions</h5>
+        <h5 className="font-weight-bold panelTitle">Recent Payments</h5>
         {/* LOADER */}
         <div
           className="loaderContainer mt-5"
@@ -27,18 +37,19 @@ function RecentTransactions(props) {
           }
         </div>
       </div>
-      {/* TRANSACTIONS CONTENT */}
+      {/* PaymentS CONTENT */}
       <div
         style={{
           display: !props.givings && "none",
         }}
       >
-        {/* RECENT TRANSACTIONS DESKTOP */}
+        {/* RECENT PaymentS DESKTOP */}
         <div
-          className="transHistoryContainer mt-md-4 d-none d-md-block"
-          style={{
-            display: !props.givings && "none",
-          }}
+          className={
+            props.givings && props.givings.length > 0
+              ? "d-none d-md-block transHistoryContainer mt-md-4"
+              : "d-none"
+          }
         >
           {props.givings &&
             props.givings
@@ -48,6 +59,12 @@ function RecentTransactions(props) {
                 <div
                   className="transHistoryCard d-flex align-items-center"
                   key={giving.id}
+                  onClick={() =>
+                    showPayment({
+                      ...giving,
+                      date: giving.date.toDate(),
+                    })
+                  }
                 >
                   <div className="col-2 col-md-1 mr-md-4 p-0">
                     <div
@@ -77,16 +94,30 @@ function RecentTransactions(props) {
                 </div>
               ))}
         </div>
-        {/* RECENT TRANSACTIONS MOBILE */}
-        <div className="transHistoryContainer mt-2 d-md-none">
+        {/* RECENT PAYMENTS MOBILE */}
+        <div
+          className={
+            props.givings && props.givings.length > 0
+              ? "d-block d-md-none transHistoryContainer mt-2"
+              : "d-none"
+          }
+        >
           {props.givings &&
             props.givings
               .sort((a, b) => (a.date > b.date ? -1 : 1))
               .slice(0, 7)
               .map((giving) => (
-                <div
-                  className="transHistoryCard d-flex align-items-center"
+                <Link
+                  to={{
+                    pathname: `/Payment/${giving.id}`,
+                    state: {
+                      ...giving,
+                      date: giving.date.toDate(),
+                      accountType: props.accountType.toLowerCase(),
+                    },
+                  }}
                   key={giving.id}
+                  className="rowLink transHistoryCard d-flex align-items-center"
                 >
                   <div className="col-2 col-md-1 mr-md-4 p-0">
                     <div
@@ -113,12 +144,12 @@ function RecentTransactions(props) {
                   <div className="col-3 col-md-4 p-0 text-right transHistoryText">
                     {giving.type}
                   </div>
-                </div>
+                </Link>
               ))}
         </div>
         {/* empty illustration */}
         <div
-          className="flex-column align-items-center justify-content-center"
+          className="flex-column align-items-center justify-content-center mt-4"
           style={{
             display:
               props.givings && props.givings.length > 0 ? "none" : "flex",
@@ -126,12 +157,20 @@ function RecentTransactions(props) {
         >
           <img src={empty} width="70%" />
           <span className="mt-3">
-            <i>no transactions yet</i>
+            <i>no Payments yet</i>
           </span>
         </div>
       </div>
+      <PaymentPanel
+        selectedPayment={selectedPayment}
+        openPanel={displayPaymentPanel}
+        closePanel={() => setDisplayPaymentPanel(false)}
+        state={{
+          accountType: props.accountType && props.accountType.toLowerCase(),
+        }}
+      />
     </>
   );
 }
 
-export default RecentTransactions;
+export default RecentPayments;

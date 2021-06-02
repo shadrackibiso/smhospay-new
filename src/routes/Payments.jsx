@@ -1,20 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
 import "../css/home.css";
 import Header from "../components/Header";
 import empty from "../images/empty.svg";
 import { FaHandHoldingUsd } from "react-icons/fa";
 import Sidebar from "../components/Sidebar";
-import Navbar from "../components/Navbar";
+import MobileNav from "../components/MobileNav";
 import moment from "moment";
 import numeral from "numeral";
 import { CircleSpinner } from "react-spinners-kit";
+import { ClassicSpinner } from "react-spinners-kit";
+import { Link } from "react-router-dom";
+import PaymentPanel from "../components/PaymentPanel";
 
-function Transactions(props) {
+function Payments(props) {
+  const [displayPaymentPanel, setDisplayPaymentPanel] = useState(false);
+  const [selectedPayment, setSelectedPayment] = useState(null);
+
+  const showPayment = (props) => {
+    setSelectedPayment(props);
+    setDisplayPaymentPanel(true);
+  };
+
   return (
     <>
       <div className="pageContainer">
         {/* SIDEBAR */}
-        <Sidebar page="transactions" />
+        <Sidebar page="payments" />
         {/* PAGE LOADER */}
         <div
           className="loaderContainer contentWrap"
@@ -32,13 +43,32 @@ function Transactions(props) {
           }}
         >
           {/* HEADER */}
-          <Header title={"Transaction History"} {...props} />
+          <Header title={"Payment History"} {...props} />
           {/* CONTENT BODY */}
           <div className="fullHeight">
             <div className="container px-0">
-              <div className="loaderContainer"></div>
-              <div className="row">
-                {/* RECENT TRANSACTIONS DESKTOP */}
+              {/* LOADER */}
+              <div
+                className="loaderContainer mt-5"
+                style={{
+                  display: props.givings && "none",
+                }}
+              >
+                {
+                  <ClassicSpinner
+                    size={30}
+                    color="#dddddd"
+                    loading={!props.givings}
+                  />
+                }
+              </div>
+              <div
+                className="row"
+                style={{
+                  display: !props.givings && "none",
+                }}
+              >
+                {/* RECENT PaymentS DESKTOP */}
                 <div
                   className="col-12"
                   style={{
@@ -46,8 +76,8 @@ function Transactions(props) {
                   }}
                 >
                   <div className="transHistoryContainer d-none d-md-block">
-                    {/* TRANSACTION TABLE HEAD */}
-                    <div className="transHistoryCard d-flex align-items-center">
+                    {/* Payment TABLE HEAD */}
+                    <div className="transHistoryCard transHistoryHeader d-flex align-items-center">
                       <div className="col-md-1 p-0">
                         {/* <div className="transHistoryCardIcon totalIcon">
                           <FaHandHoldingUsd />
@@ -56,9 +86,14 @@ function Transactions(props) {
                       <div className="col-md-3 p-0">Amount</div>
                       <div className="col-md-2 p-0">Payment Type</div>
                       <div className="col-md-3 p-0">Date</div>
-                      <div className="col-md-3 p-0">Note</div>
+                      <div className="col-md-3 p-0">
+                        {props.accountType &&
+                        props.accountType.toLowerCase() === "admin"
+                          ? "Tithe Number"
+                          : "Note"}
+                      </div>
                     </div>
-                    {/* TRANSACTIONS LOOP */}
+                    {/* PaymentS LOOP */}
                     {props.givings &&
                       props.givings
                         .sort((a, b) => (a.date > b.date ? -1 : 1))
@@ -66,6 +101,12 @@ function Transactions(props) {
                           <div
                             className="transHistoryCard d-flex align-items-center"
                             key={giving.id}
+                            onClick={() =>
+                              showPayment({
+                                ...giving,
+                                date: giving.date.toDate(),
+                              })
+                            }
                           >
                             <div className="col-2 col-md-1 p-0">
                               <div
@@ -92,8 +133,27 @@ function Transactions(props) {
                             <div className="col-md-3 p-0 transHistoryText-n">
                               {moment(giving.date.toDate()).format("LLLL")}
                             </div>
-                            <div className="col-md-3 p-0 transHistoryText-n">
+                            <div
+                              className="col-md-3 p-0 transHistoryText-n"
+                              style={{
+                                display:
+                                  props.accountType.toLowerCase() !== "admin"
+                                    ? "block"
+                                    : "none",
+                              }}
+                            >
                               {giving.note ? giving.note : "-"}
+                            </div>
+                            <div
+                              className="col-md-3 p-0 transHistoryText-n"
+                              style={{
+                                display:
+                                  props.accountType.toLowerCase() === "admin"
+                                    ? "block"
+                                    : "none",
+                              }}
+                            >
+                              {giving.titheNumber}
                             </div>
                           </div>
                         ))}
@@ -111,10 +171,10 @@ function Transactions(props) {
                 >
                   <img src={empty} width="40%" />
                   <span className="mt-3">
-                    <i>no transactions yet</i>
+                    <i>no payments yet</i>
                   </span>
                 </div>
-                {/* TRANSACTION MOBILE */}
+                {/* PAYMENT MOBILE */}
                 <div
                   className="col-12"
                   style={{
@@ -126,9 +186,17 @@ function Transactions(props) {
                       props.givings
                         .sort((a, b) => (a.date > b.date ? -1 : 1))
                         .map((giving) => (
-                          <div
-                            className="transHistoryCard d-flex align-items-center"
+                          <Link
+                            to={{
+                              pathname: `/payment/${giving.id}`,
+                              state: {
+                                ...giving,
+                                date: giving.date.toDate(),
+                                accountType: props.accountType.toLowerCase(),
+                              },
+                            }}
                             key={giving.id}
+                            className="rowLink transHistoryCard d-flex align-items-center"
                           >
                             <div className="col-2 col-md-1 mr-md-4 p-0">
                               <div
@@ -155,19 +223,27 @@ function Transactions(props) {
                             <div className="col-3 col-md-4 p-0 text-right transHistoryText">
                               {giving.type}
                             </div>
-                          </div>
+                          </Link>
                         ))}
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          {/* NAVBAR */}
-          <Navbar page="transactions" />
+          {/* MOBILE NAV */}
+          <MobileNav page="Payments" />
         </div>
       </div>
+      <PaymentPanel
+        selectedPayment={selectedPayment}
+        openPanel={displayPaymentPanel}
+        closePanel={() => setDisplayPaymentPanel(false)}
+        state={{
+          accountType: props.accountType && props.accountType.toLowerCase(),
+        }}
+      />
     </>
   );
 }
 
-export default Transactions;
+export default Payments;

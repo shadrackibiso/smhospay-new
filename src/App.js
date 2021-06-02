@@ -49,14 +49,60 @@ class App extends React.Component {
               loading: false,
             }));
 
-            this.checkGivings();
+            user.data().accountType.toLowerCase() === "admin"
+              ? this.checkAllGivings()
+              : this.checkUserGivings();
           }
         })
-      )
-      .catch((error) => console.log(error.message));
+      );
   };
 
-  checkGivings = () => {
+  checkAllGivings = () => {
+    firebase
+      .firestore()
+      .collection("givings")
+      .get()
+      .then((data) => {
+        let givings = [];
+        let totalGivings = 0;
+        let totalTithes = 0;
+        let totalOfferings = 0;
+        let totalOthers = 0;
+
+        data.forEach((giving) => {
+          givings.push({ ...giving.data() });
+
+          totalGivings += giving.data().amount;
+
+          if (giving.data().type.toLowerCase() === "tithe") {
+            totalTithes += giving.data().amount;
+          }
+
+          if (giving.data().type.toLowerCase() === "offering") {
+            totalOfferings += giving.data().amount;
+          }
+
+          if (
+            giving.data().type.toLowerCase() !== "offering" &&
+            giving.data().type.toLowerCase() !== "tithe"
+          ) {
+            totalOthers += giving.data().amount;
+          }
+        });
+
+        this.setState((prevState) => ({
+          ...prevState,
+          givings,
+          totalGivings,
+          totalTithes,
+          totalOfferings,
+          totalOthers,
+          loadingGivings: false,
+        }));
+      });
+  };
+
+  checkUserGivings = () => {
     firebase
       .firestore()
       .collection("givings")
@@ -128,8 +174,6 @@ class App extends React.Component {
           totalOfferings: prevState.totalOfferings + offering,
           totalOthers: prevState.totalOthers + other,
         }));
-
-        // this.checkGivings()
       })
       .catch((error) => console.log(error));
   };

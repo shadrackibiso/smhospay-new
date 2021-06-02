@@ -6,12 +6,14 @@ import "react-toastify/dist/ReactToastify.css";
 
 function PayForm(props) {
   const [paymentType, setPaymentType] = useState("tithe");
-  const refName = paymentType.split(" ").join("-");
   const [amount, setAmount] = useState("");
   const [note, setNote] = useState("");
   const email = props.email;
+  const givingID = Math.floor(
+    1000000000 + Math.random() * (10000000000 - 1000000000)
+  );
+  const reference = `${givingID}`;
   const publicKey = "pk_test_fb12227020084366acb5f94723d704c5eced79a1";
-  const reference = `${refName}-${uuidv4()}`;
   const componentProps = {
     email,
     amount,
@@ -24,18 +26,18 @@ function PayForm(props) {
 
   const handleSuccessfulPayment = () => {
     let giving = {
-      id: uuidv4(),
+      id: givingID,
       type: paymentType,
       amount: amount / 100,
+      note: note,
       date: new Date(),
       success: true,
       uid: props.uid,
       givenBy: `${props.firstName} ${props.lastName}`,
-      note: note,
+      titheNumber: props.titheNumber,
     };
 
     props.addGiving(giving);
-    console.log(giving);
     toast.success("Transaction successful.");
   };
 

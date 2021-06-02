@@ -1,14 +1,13 @@
 import React from "react";
-import Header from "../components/Header";
+import Header from "../components/HeaderInner";
 import Sidebar from "../components/Sidebar";
-import Navbar from "../components/Navbar";
 import PayForm from "../components/PayForm";
 import { CircleSpinner } from "react-spinners-kit";
 
 function Pay(props) {
   return (
     <>
-      <div className="pageContainer">
+      <div className="pageContainer animate__animated animate__slideInRight">
         {/* SIDEBAR */}
         <Sidebar page="pay" />
         {/* PAGE LOADER */}
@@ -36,8 +35,6 @@ function Pay(props) {
               <PayForm {...props} />
             </div>
           </div>
-          {/* NAVBAR */}
-          <Navbar page="pay" />
         </div>
       </div>
     </>
