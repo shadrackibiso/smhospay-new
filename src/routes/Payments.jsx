@@ -169,7 +169,7 @@ function Payments(props) {
                         : "flex",
                   }}
                 >
-                  <img src={empty} width="40%" />
+                  <img src={empty} alt="no payments" width="40%" />
                   <span className="mt-3">
                     <i>no payments yet</i>
                   </span>

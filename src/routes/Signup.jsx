@@ -18,8 +18,6 @@ function Signup(props) {
     titheNumber: Math.floor(1000000 + Math.random() * (10000000 - 1000000)),
   });
 
-  let newUser;
-
   const handleChange = (e) => {
     let detail = { [e.target.name]: e.target.value };
     setProfile((prevState) => ({ ...prevState, ...detail }));
@@ -50,7 +48,6 @@ function Signup(props) {
       auth
         .createUserWithEmailAndPassword(email, password)
         .then((userCredential) => {
-          newUser = userCredential;
           // create user account on database and retrieve the data
           createUserProfile(userCredential);
           // add user detail to local storage for login Authentication
@@ -61,7 +58,6 @@ function Signup(props) {
           setLoading(false);
         })
         .then(() => {
-          createUserProfile(newUser);
           // check data
           props.checkData();
           // redirect to user dashboard

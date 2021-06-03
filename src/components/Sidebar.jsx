@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { NavLink } from "react-router-dom";
 import { MdReceipt, MdDashboard } from "react-icons/md";
 import logo from "../images/logo.svg";
@@ -9,7 +9,7 @@ function Sidebar(props) {
   return (
     <div className="sidebar d-none d-lg-block">
       <div className="sidebarHeader">
-        <img src={logo} width="120px" />
+        <img src={logo} width="120px" alt="logo" />
       </div>
       <div className="fullHeight sidebarNavContainer">
         {/* HOME */}

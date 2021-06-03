@@ -13,8 +13,6 @@ const firebaseConfig = {
   measurementId: "G-10CMJDDLNP",
 };
 
-// const fb = firebase.initializeApp(firebaseConfig);
-// export default fb;
 firebase.initializeApp(firebaseConfig);
 
 export const auth = firebase.auth();

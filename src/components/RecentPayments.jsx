@@ -155,7 +155,7 @@ function RecentPayments(props) {
               props.givings && props.givings.length > 0 ? "none" : "flex",
           }}
         >
-          <img src={empty} width="70%" />
+          <img src={empty} alt="no payments" width="70%" />
           <span className="mt-3">
             <i>no Payments yet</i>
           </span>

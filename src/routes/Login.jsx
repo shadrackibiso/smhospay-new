@@ -42,7 +42,7 @@ function Login(props) {
             {/* FORM */}
             <div className="col-lg-5 signUpFormContainer">
               <div>
-                <img src={logo} width="150px" className="mb-5" />
+                <img src={logo} alt="logo" width="150px" className="mb-5" />
               </div>
               <form
                 className="signUpForm loginForm text-center"
