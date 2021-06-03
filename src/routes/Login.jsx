@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { NavLink, Redirect } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import fb from "../config/config";
+import { auth } from "../config/config";
 import logo from "../images/logo-l.png";
 import ReactLoading from "react-loading";
 import "react-toastify/dist/ReactToastify.css";
@@ -15,7 +15,7 @@ function Login(props) {
     setLoading(true);
     // initialize login
     const form = document.querySelector("form.loginForm");
-    fb.auth()
+    auth
       .signInWithEmailAndPassword(form.email.value, form.password.value)
       .then((data) => {
         props.checkData();

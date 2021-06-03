@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
-import fb from "../config/config";
+import { auth } from "../config/config";
 
 function ProfileModal(props) {
   const [redirect, setRedirect] = useState(false);
   const logOut = () => {
-    fb.auth().signOut().then(localStorage.clear("user"));
+    auth.signOut().then(localStorage.clear("user"));
     setRedirect(true);
   };
 

@@ -2,7 +2,6 @@ import React from "react";
 import "../css/home.css";
 import Header from "../components/HeaderInner";
 import { FaHandHoldingUsd } from "react-icons/fa";
-import Sidebar from "../components/Sidebar";
 import moment from "moment";
 import numeral from "numeral";
 import { CircleSpinner } from "react-spinners-kit";

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { PaystackButton } from "react-paystack";
-import { v4 as uuidv4 } from "uuid";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -13,7 +12,7 @@ function PayForm(props) {
     1000000000 + Math.random() * (10000000000 - 1000000000)
   );
   const reference = `${givingID}`;
-  const publicKey = "pk_test_fb12227020084366acb5f94723d704c5eced79a1";
+  const publicKey = "pk_live_31be4c58875711da343a63dcc301586f7facd789";
   const componentProps = {
     email,
     amount,

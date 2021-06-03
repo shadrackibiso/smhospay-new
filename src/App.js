@@ -4,14 +4,12 @@ import "./App.css";
 import "./css/bootstrap.min.css";
 // import SplashScreen from "./components/SplashScreen";
 import moment from "moment";
-import fb from "./config/config";
-import firebase from "firebase/app";
+import { auth, firestore } from "./config/config";
 import AppRouter from "./routes/AppRouter";
 // const AppRouter = lazy(() => import("./routes/AppRouter"));
 
 class App extends React.Component {
   state = {
-    // user: {},
     totalGivings: 0,
     totalTithes: 0,
     totalOfferings: 0,
@@ -25,7 +23,7 @@ class App extends React.Component {
   }
 
   authListener() {
-    fb.auth().onAuthStateChanged((user) => {
+    auth.onAuthStateChanged((user) => {
       if (user) {
         this.setState({ user });
         this.checkData();
@@ -36,8 +34,7 @@ class App extends React.Component {
   }
 
   checkData = () => {
-    firebase
-      .firestore()
+    firestore
       .collection("users")
       .get()
       .then((data) =>
@@ -58,8 +55,7 @@ class App extends React.Component {
   };
 
   checkAllGivings = () => {
-    firebase
-      .firestore()
+    firestore
       .collection("givings")
       .get()
       .then((data) => {
@@ -103,8 +99,7 @@ class App extends React.Component {
   };
 
   checkUserGivings = () => {
-    firebase
-      .firestore()
+    firestore
       .collection("givings")
       .get()
       .then((data) => {
@@ -151,8 +146,7 @@ class App extends React.Component {
   };
 
   addGiving = (giving) => {
-    firebase
-      .firestore()
+    firestore
       .collection("givings")
       .doc(`${giving.id}`)
       .set(giving)

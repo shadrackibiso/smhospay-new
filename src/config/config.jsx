@@ -10,8 +10,12 @@ const firebaseConfig = {
   storageBucket: "smhospay.appspot.com",
   messagingSenderId: "831847651632",
   appId: "1:831847651632:web:3cd31bb10a8132f8a190f5",
-  measurementId: "G-10CMJDDLNP"
+  measurementId: "G-10CMJDDLNP",
 };
 
-const fb = firebase.initializeApp(firebaseConfig);
-export default fb;
+// const fb = firebase.initializeApp(firebaseConfig);
+// export default fb;
+firebase.initializeApp(firebaseConfig);
+
+export const auth = firebase.auth();
+export const firestore = firebase.firestore();

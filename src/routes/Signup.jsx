@@ -1,69 +1,71 @@
 import React, { useState } from "react";
 import { NavLink, Redirect } from "react-router-dom";
-import fb from "../config/config";
-import firebase from "firebase/app";
+import { auth, firestore } from "../config/config";
 import { ToastContainer, toast } from "react-toastify";
-// import logo from "../images/logo.svg"
 import ReactLoading from "react-loading";
 import "react-toastify/dist/ReactToastify.css";
+// import logo from "../images/logo.svg"
 
 function Signup(props) {
   const [redirect, setRedirect] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState({
+  const [email, setEmail] = useState(null);
+  const [password, setPassword] = useState(null);
+  const [cPassword, setCPassword] = useState(null);
+  const [profile, setProfile] = useState({
     accountType: "user",
     createdAt: new Date(),
-    firstName: "",
-    lastName: "",
     titheNumber: Math.floor(1000000 + Math.random() * (10000000 - 1000000)),
-    email: "",
   });
+
+  let newUser;
 
   const handleChange = (e) => {
     let detail = { [e.target.name]: e.target.value };
-    setUser((prevState) => ({ ...prevState, ...detail }));
+    setProfile((prevState) => ({ ...prevState, ...detail }));
+  };
+
+  const createUserProfile = ({ user }) => {
+    firestore
+      .collection("users")
+      .doc(`${profile.firstName}-${profile.lastName}-${user.uid}`)
+      .set({
+        id: `${profile.firstName}-${profile.lastName}-${user.uid}`,
+        uid: `${user.uid}`,
+        email,
+        ...profile,
+      })
+      .then()
+      .catch((error) => {
+        console.log(error);
+        toast.error(error.message);
+        setLoading(false);
+      });
   };
 
   const signup = (e) => {
     e.preventDefault();
     setLoading(true);
-    const form = document.querySelector("form.signUpForm");
-    if (form.password.value === form.c_password.value) {
-      fb.auth()
-        .createUserWithEmailAndPassword(form.email.value, form.password.value)
-        .then((data) => {
-          // add user detail to local storage for login Authentication
-          localStorage.setItem("user", JSON.stringify(data.user.uid));
-          // user profile
-          const profile = {
-            id: `${user.firstName}-${user.lastName}-${data.user.uid}`,
-            uid: `${data.user.uid}`,
-            ...user,
-          };
-          // prevent user password from being stored on the database
-          delete profile.password;
-          delete profile.c_password;
+    if (password === cPassword) {
+      auth
+        .createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          newUser = userCredential;
           // create user account on database and retrieve the data
-          firebase
-            .firestore()
-            .collection("users")
-            .doc(`${profile.id}`)
-            .set(profile)
-            .then(() => {
-              props.checkData();
-            })
-            .catch((error) => {
-              toast.error(error.message);
-              setLoading(false);
-            });
-        })
-        .then(() => {
-          // redirect to user dashboard
-          setRedirect(true);
+          createUserProfile(userCredential);
+          // add user detail to local storage for login Authentication
+          localStorage.setItem("user", JSON.stringify(true));
         })
         .catch((error) => {
           toast.error(error.message);
           setLoading(false);
+        })
+        .then(() => {
+          createUserProfile(newUser);
+          // check data
+          props.checkData();
+          // redirect to user dashboard
+          setRedirect(true);
         });
     } else {
       toast.error("Your passwords do not match");
@@ -86,7 +88,11 @@ function Signup(props) {
                   </div> */}
             {/* FORM */}
             <div className="col-lg-5 signUpFormContainer">
-              <form className="signUpForm text-center" onSubmit={signup}>
+              <form
+                className="signUpForm text-center"
+                id="signUpForm"
+                onSubmit={signup}
+              >
                 <h3 className="font-weight-bold mb-5">Create An Account</h3>
                 {/* FIRST NAME */}
                 <input
@@ -113,7 +119,7 @@ function Signup(props) {
                   placeholder="Email Address"
                   className="inputContainer mb-3"
                   required
-                  onChange={handleChange}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
                 {/* PASSWORD */}
                 <input
@@ -122,7 +128,7 @@ function Signup(props) {
                   placeholder="Password"
                   className="inputContainer mb-3"
                   required
-                  onChange={handleChange}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
                 {/* CONFIRM PASSWORD */}
                 <input
@@ -131,7 +137,7 @@ function Signup(props) {
                   placeholder="Confirm Password"
                   className="inputContainer mb-3"
                   required
-                  onChange={handleChange}
+                  onChange={(e) => setCPassword(e.target.value)}
                 />
                 {/* BUTTON */}
                 <button
