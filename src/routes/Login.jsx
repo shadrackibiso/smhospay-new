@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { NavLink, Redirect } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { auth } from "../config/config";
-import logo from "../images/logo-l.png";
+import logo from "../images/login-logo.png";
 import ReactLoading from "react-loading";
 import "react-toastify/dist/ReactToastify.css";
 

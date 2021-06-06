@@ -12,10 +12,13 @@ function Signup(props) {
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
   const [cPassword, setCPassword] = useState(null);
+  const [titheNumber, setTitheNumber] = useState(
+    Math.floor(1000000 + Math.random() * (10000000 - 1000000))
+  );
+  const [displayTitheNumberForm, setDisplayTitheNumberForm] = useState(false);
   const [profile, setProfile] = useState({
     accountType: "user",
     createdAt: new Date(),
-    titheNumber: Math.floor(1000000 + Math.random() * (10000000 - 1000000)),
   });
 
   const handleChange = (e) => {
@@ -33,7 +36,12 @@ function Signup(props) {
         email,
         ...profile,
       })
-      .then()
+      .then(() => {
+        setProfile((prevState) => ({
+          ...prevState,
+          uid: user.uid,
+        }));
+      })
       .catch((error) => {
         console.log(error);
         toast.error(error.message);
@@ -58,15 +66,58 @@ function Signup(props) {
           setLoading(false);
         })
         .then(() => {
-          // check data
-          props.checkData();
-          // redirect to user dashboard
-          setRedirect(true);
+          setLoading(false);
+          // show tithe number form
+          setDisplayTitheNumberForm(true);
         });
     } else {
       toast.error("Your passwords do not match");
       setLoading(false);
     }
+  };
+
+  const handleTitheNumber = (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    firestore
+      .collection("users")
+      .doc(`${profile.firstName}-${profile.lastName}-${profile.uid}`)
+      .update({
+        titheNumber,
+      })
+      .then(() => {
+        // check data
+        props.checkData();
+        // redirect to user dashboard
+        setRedirect(true);
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error(error.message);
+      });
+  };
+
+  const generateTitheNumber = (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    firestore
+      .collection("users")
+      .doc(`${profile.firstName}-${profile.lastName}-${profile.uid}`)
+      .update({
+        titheNumber: Math.floor(1000000 + Math.random() * (10000000 - 1000000)),
+      })
+      .then(() => {
+        // check data
+        props.checkData();
+        // redirect to user dashboard
+        setRedirect(true);
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error(error.message);
+      });
   };
 
   return (
@@ -88,6 +139,7 @@ function Signup(props) {
                 className="signUpForm text-center"
                 id="signUpForm"
                 onSubmit={signup}
+                style={{ display: !displayTitheNumberForm ? "block" : "none" }}
               >
                 <h3 className="font-weight-bold mb-5">Create An Account</h3>
                 {/* FIRST NAME */}
@@ -141,7 +193,7 @@ function Signup(props) {
                   className="shadow text-align-center d-flex align-items-center justify-content-center"
                 >
                   {/* button text */}
-                  {!loading && <span>Sign Up</span>}
+                  {!loading && <span>Continue</span>}
                   {/* loading animation */}
                   {loading && (
                     <ReactLoading
@@ -159,6 +211,58 @@ function Signup(props) {
                     <span className="font-weight-bold"> Login</span>
                   </NavLink>
                 </div>
+              </form>
+              {/* ==== 
+              TITHE NUMBER FORM
+               ==== */}
+              <form
+                className="signUpForm text-center"
+                id="titheNumberForm"
+                onSubmit={handleTitheNumber}
+                style={{ display: displayTitheNumberForm ? "block" : "none" }}
+                name="titheNumberForm"
+              >
+                <h3 className="font-weight-bold mb-2">Almost Done</h3>
+                <p className="mb-5">Add Your Tithe Number</p>
+                {/* TITHE NUMBER */}
+                <input
+                  type="text"
+                  name="titheNumber"
+                  placeholder="Tithe Number"
+                  className="inputContainer mb-3"
+                  onChange={(e) => setTitheNumber(e.target.value)}
+                  required
+                />
+                {/* continue button */}
+                <button
+                  type="submit"
+                  className="text-align-center d-flex align-items-center justify-content-center"
+                >
+                  {/* button text */}
+                  {!loading && <span>Continue</span>}
+                  {/* loading animation */}
+                  {loading && (
+                    <ReactLoading
+                      type="spin"
+                      color="white"
+                      width={20}
+                      height={20}
+                      className="d-flex"
+                    />
+                  )}
+                </button>
+                {/* no tithe number */}
+                <h6 className="text-center mt-5 mb-3 text-grey">
+                  Don't have a Tithe Number?
+                </h6>
+                <button
+                  type="button"
+                  className="text-align-center borderBtn d-flex align-items-center justify-content-center"
+                  onClick={generateTitheNumber}
+                >
+                  {/* button text */}
+                  <span>Generate Tithe Number</span>
+                </button>
               </form>
             </div>
           </div>

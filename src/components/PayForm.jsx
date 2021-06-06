@@ -54,8 +54,12 @@ function PayForm(props) {
             >
               <option value="tithe">Tithe</option>
               <option value="offering">Offering</option>
-              <option value="prophet seed">Prophet Seed</option>
-              <option value="cathedral seed">Cathedral Seed</option>
+              <option value="prophet offering">Prophet Offering</option>
+              <option value="cathedral sacrifice">Cathedral Sacrifice</option>
+              <option value="first fruit">First Fruit</option>
+              <option value="thanksgiving offering">
+                Thanksgiving Offering
+              </option>
             </select>
           </div>
           {/* AMOUNT */}

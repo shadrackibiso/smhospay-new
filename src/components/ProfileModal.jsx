@@ -29,9 +29,9 @@ function ProfileModal(props) {
             {props.firstName && props.firstName}{" "}
             {props.lastName && props.lastName}
           </h4>
-          <p>{props.email}</p>
+          <p>TN: {props.titheNumber}</p>
           <button
-            className="mainBtn py-2 px-4 bg-danger border-danger"
+            className="mainBtn mt-3 py-2 px-4 bg-danger border-danger"
             onClick={logOut}
           >
             Logout
