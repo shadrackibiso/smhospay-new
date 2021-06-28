@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ProfileModal from "../components/ProfileModal";
 import { MdMenu } from "react-icons/md";
+import { BiUser } from "react-icons/bi";
 
 function Header(props) {
   const [showProfileModal, setDisplayModal] = useState(false);
@@ -43,8 +44,9 @@ function Header(props) {
             </div>
             {/* avatar */}
             <div className="profilePic" onClick={() => setDisplayModal(true)}>
-              <div className="profilePicText">
-                {props.firstName && props.firstName.slice(0, 1)}
+              <div className="profilePicText d-flex align-items-center">
+                {/* {props.firstName && props.firstName.slice(0, 1)} */}
+                <BiUser />
               </div>
             </div>
           </div>

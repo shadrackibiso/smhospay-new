@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { MdReceipt, MdDashboard } from "react-icons/md";
+import { MdReceipt, MdDashboard, MdPeople, MdSettings } from "react-icons/md";
 import logo from "../images/logo.svg";
 
 function Sidebar(props) {
@@ -49,6 +49,32 @@ function Sidebar(props) {
               <div className="sidebarNavText">payments</div>
             </div>
           </NavLink>
+          {/* USERS */}
+          <NavLink to="/users">
+            <div
+              className={
+                props.page === "users" ? "sidebarNav active" : "sidebarNav"
+              }
+            >
+              <div className="sidebarNavIcon">
+                <MdPeople />
+              </div>
+              <div className="sidebarNavText">users</div>
+            </div>
+          </NavLink>
+          {/* SETTING */}
+          {/* <NavLink to="/settings">
+            <div
+              className={
+                props.page === "settings" ? "sidebarNav active" : "sidebarNav"
+              }
+            >
+              <div className="sidebarNavIcon">
+                <MdSettings />
+              </div>
+              <div className="sidebarNavText">settings</div>
+            </div>
+          </NavLink> */}
         </div>
       </div>
     </>

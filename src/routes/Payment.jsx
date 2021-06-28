@@ -30,7 +30,7 @@ function Transaction(props) {
           }}
         >
           {/* HEADER */}
-          <Header title="payment" />
+          <Header title="payment details" />
           {/* CONTENT BODY */}
           <div className="fullHeight">
             <div className="container px-0">
@@ -90,11 +90,9 @@ function Transaction(props) {
                     <hr />
                     {/* -- */}
                     <div className="d-flex align-items-center justify-content-between">
+                      <div className="transHistoryText thpText">Given By</div>
                       <div className="transHistoryText thpText">
-                        Tithe Number
-                      </div>
-                      <div className="transHistoryText thpText">
-                        {giving && giving.titheNumber}
+                        {giving && giving.givenBy}
                       </div>
                     </div>
                   </div>

@@ -16,6 +16,7 @@ class App extends React.Component {
     totalOthers: 0,
     loading: true,
     loadingGivings: true,
+    loadingUsers: true,
   };
 
   componentDidMount() {
@@ -46,12 +47,34 @@ class App extends React.Component {
               loading: false,
             }));
 
-            user.data().accountType.toLowerCase() === "admin"
-              ? this.checkAllGivings()
-              : this.checkUserGivings();
+            if (user.data().accountType.toLowerCase() === "admin") {
+              this.checkAllGivings();
+              this.checkAllUsers();
+            } else {
+              this.checkUserGivings();
+            }
           }
         })
       );
+  };
+
+  checkAllUsers = () => {
+    firestore
+      .collection("users")
+      .get()
+      .then((data) => {
+        let users = [];
+
+        data.forEach((user) => {
+          users.push({ ...user.data() });
+        });
+
+        this.setState((prevState) => ({
+          ...prevState,
+          users,
+          loadingUsers: false,
+        }));
+      });
   };
 
   checkAllGivings = () => {

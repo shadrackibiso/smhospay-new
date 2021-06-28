@@ -1,6 +1,7 @@
 :root {
   --color-1: #007cb7;
   --color-2: #011b33;
+  --color-3: #006594;
 }
 @font-face {
   font-family: mainFont;
@@ -83,6 +84,16 @@ a:hover {
 .mainBtn {
   background: var(--color-1);
   border: 1px solid var(--color-1);
+  border-radius: 3px;
+  padding: 0.5em 1em;
+  color: white;
+  font-size: 0.9rem;
+  text-transform: capitalize;
+  transition: 0.2s ease;
+}
+.mainBtnRound {
+  background: var(--color-1);
+  border: 1px solid var(--color-1);
   border-radius: 50px;
   padding: 0.2em 1em;
   color: white;
@@ -90,9 +101,10 @@ a:hover {
   text-transform: capitalize;
   transition: 0.2s ease;
 }
-.mainBtn:hover {
-  background-color: var(--color-2);
-  border: 1px solid var(--color-2);
+.mainBtn:hover,
+.mainBtnRound:hover {
+  background-color: var(--color-3);
+  border: 1px solid var(--color-3);
   color: white;
 }
 .subBtn {
@@ -106,8 +118,8 @@ a:hover {
   transition: 0.2s ease;
 }
 .subBtn:hover {
-  background-color: var(--color-2);
-  border: 1px solid var(--color-2);
+  background-color: var(--color-3);
+  border: 1px solid var(--color-3);
   color: white;
 }
 
@@ -128,6 +140,11 @@ a:hover {
 }
 .fullHeight {
   height: calc(100vh - 70px);
+  overflow: auto;
+  padding: 3em 0;
+}
+.fullHeight-f {
+  height: calc(100vh - 140px);
   overflow: auto;
   padding: 3em 0;
 }
@@ -182,62 +199,6 @@ a:hover {
 }
 .sidebarBackdrop {
   display: none;
-}
-
-/* NAVBAR */
-.navbar {
-  position: fixed !important;
-  bottom: 0 !important;
-  left: 0 !important;
-  width: 100vw !important;
-  z-index: 99;
-  background: white;
-  height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-top: 1px solid #eeeeee;
-}
-.navbar a {
-  width: 33.3333%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.navBtn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 33.3333%;
-  height: 100%;
-}
-.navBtnIcon {
-  font-size: 1.3rem;
-  color: rgb(170, 170, 170);
-}
-.payBtn {
-  color: var(--color-1);
-  font-size: 2rem;
-  opacity: 1;
-}
-.navBtnText {
-  font-size: 0.7rem;
-  color: grey;
-  display: none;
-}
-.navBtn.active .navBtnIcon {
-  color: black;
-}
-.navBtn.active .payBtn {
-  color: var(--color-1);
-}
-.navBtn.active .navBtnText {
-  color: var(--color-2);
 }
 
 /* STATS */
@@ -408,6 +369,12 @@ a:hover {
   border: 1px solid #eeeeee;
   padding: 1em 1.5em 2.6em;
 }
+.payFormTitheNumberError {
+  border: 1px solid rgba(255, 0, 0, 0.397);
+  background-color: rgba(255, 0, 0, 0.048);
+  border-radius: 5px;
+  padding: 1em;
+}
 
 /* PAY MODAL */
 .modalContainer {
@@ -442,15 +409,36 @@ label {
   opacity: 0.6;
 }
 .inputContainer {
-  border: 1px solid #eeeeee;
+  border: 1px solid #e6e6e6;
   border-radius: 5px;
   padding: 0.5em 1em;
   /* background: #f2f2f2; */
-  width: 100%;
+  /* width: 100%; */
+}
+.filterInputContainer {
+  border: 1px solid #e6e6e6;
+  border-radius: 3px;
+  padding: 0.5em;
+  font-size: 0.9rem;
+  /* background: #f2f2f2; */
+  /* width: 100%; */
+}
+::placeholder {
+  color: rgb(150, 150, 150);
+  opacity: 1; /* Firefox */
 }
 .inputContainer:focus {
   border: 1px solid #b6b6b6;
   outline: none;
+}
+.filterContainer .inputContainer {
+  color: #484848;
+  font-weight: 300;
+}
+.filterBtn,
+.filterLabel {
+  color: #484848;
+  /* font-weight: 300; */
 }
 
 /* SIGNUP PAGE */
@@ -476,7 +464,8 @@ label {
   border-radius: 5px;
   width: 100%;
 }
-.signUpForm button {
+.signUpForm button,
+.formBtn {
   width: 100%;
   background: var(--color-1);
   border-radius: 5px;
@@ -485,8 +474,9 @@ label {
   border: none;
   transition: 0.2s ease;
 }
-.signUpForm button:hover {
-  background: var(--color-2);
+.signUpForm button:hover,
+.formBtn:hover {
+  background: var(--color-3);
   box-shadow: 0px 2px 15px rgba(71, 51, 51, 0.15);
 }
 .secBtn {
@@ -499,7 +489,7 @@ label {
   transition: 0.2s ease;
 }
 .secBtn:hover {
-  color: var(--color-2) !important;
+  color: var(--color-3) !important;
   box-shadow: none !important;
 }
 .borderBtn {
@@ -514,6 +504,8 @@ label {
 }
 .borderBtn:hover {
   box-shadow: none !important;
+  background: var(--color-1) !important;
+  color: white !important;
 }
 .panelTitle {
   color: rgb(66, 66, 66);
@@ -536,7 +528,12 @@ hr {
 .text-grey {
   color: grey;
 }
+.addTitheSuccessIcon {
+  color: var(--color-1);
+  font-size: 50px;
+}
 
+/* TABLET */
 @media screen and (max-width: 1024px) {
   .contentWrap {
     width: 100vw;
@@ -573,6 +570,7 @@ hr {
   }
 }
 
+/* MOBILE */
 @media screen and (max-width: 425px) {
   .pageContainer {
     background: #f7f7f7;
@@ -608,6 +606,11 @@ hr {
     height: 35px;
   }
   .fullHeight {
+    padding: 1em;
+    padding-bottom: 80px;
+    height: calc(100vh - 60px);
+  }
+  .fullHeight-f {
     padding: 1em;
     padding-bottom: 80px;
     height: calc(100vh - 60px);
@@ -698,5 +701,59 @@ hr {
   }
   .signUpForm {
     padding: 2em 1em;
+  }
+  /* NAVBAR */
+  .navbar {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    z-index: 99;
+    background: white;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top: 1px solid #eeeeee;
+  }
+  .navbar a {
+    width: 33.3333%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .navBtn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 33.3333%;
+    height: 100%;
+  }
+  .navBtnIcon {
+    font-size: 1.3rem;
+    color: rgb(170, 170, 170);
+  }
+  .payBtn {
+    /* color: var(--color-1); */
+    /* font-size: 2rem; */
+    opacity: 1;
+  }
+  .navBtn.active .navBtnIcon {
+    color: black;
+  }
+  .navBtn.active .payBtn {
+    color: var(--color-1);
+  }
+  .navBtn.active .navBtnText {
+    color: var(--color-2);
+  }
+  .mobileNavLabel {
+    font-size: 0.58rem;
+    color: rgb(95, 95, 95);
   }
 }

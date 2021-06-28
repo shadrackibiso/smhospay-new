@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { PaystackButton } from "react-paystack";
 import { ToastContainer, toast } from "react-toastify";
+import AddTitheModal from "../components/AddTitheModal";
 import "react-toastify/dist/ReactToastify.css";
 
 function PayForm(props) {
-  const [paymentType, setPaymentType] = useState("tithe");
+  const [displayAddTitheModal, setDisplayAddTitheModal] = useState(false);
+  const [paymentType, setPaymentType] = useState("offering");
   const [amount, setAmount] = useState("");
   const [note, setNote] = useState("");
   const email = props.email;
@@ -32,7 +34,7 @@ function PayForm(props) {
       date: new Date(),
       success: true,
       uid: props.uid,
-      givenBy: `${props.firstName} ${props.lastName}`,
+      givenBy: props.email,
       titheNumber: props.titheNumber,
     };
 
@@ -52,8 +54,8 @@ function PayForm(props) {
               className="inputContainer"
               onChange={(e) => setPaymentType(e.target.value)}
             >
-              <option value="tithe">Tithe</option>
               <option value="offering">Offering</option>
+              <option value="tithe">Tithe</option>
               <option value="prophet offering">Prophet Offering</option>
               <option value="cathedral sacrifice">Cathedral Sacrifice</option>
               <option value="first fruit">First Fruit</option>
@@ -64,7 +66,7 @@ function PayForm(props) {
           </div>
           {/* AMOUNT */}
           <div className="col-lg-6 d-flex flex-column mt-3 mt-md-0">
-            <label>Amount</label>
+            <label>Amount (NGN)</label>
             <input
               type="number"
               name="amount"
@@ -84,14 +86,48 @@ function PayForm(props) {
             ></textarea>
           </div>
           {/* BUTTON */}
-          <div className="col mt-5 d-flex align-items-center justify-content-center">
-            <PaystackButton
-              className="mainBtn px-5 py-2 shadow"
-              {...componentProps}
-            />
+          <div
+            className="col-12"
+            style={{
+              display: paymentType === "tithe" && !props.titheNumber && "none",
+            }}
+          >
+            <div className="col-12 mt-5 d-flex align-items-center justify-content-center">
+              <PaystackButton
+                className="mainBtnRound px-5 py-2 shadow"
+                {...componentProps}
+              />
+            </div>
+          </div>
+          {/* ADD TITHE NUMBER MESSAGE */}
+          <div
+            className="col-12 mt-5"
+            style={{
+              display:
+                paymentType === "tithe" && !props.titheNumber
+                  ? "block"
+                  : "none",
+            }}
+          >
+            <div className="payFormTitheNumberError">
+              Tithe Number must be added before Tithe Payments can be made.
+              <span
+                onClick={() => setDisplayAddTitheModal(true)}
+                style={{ cursor: "pointer" }}
+              >
+                <u> Click Here</u>
+              </span>{" "}
+              to add your tithe number or generate a tithe number.
+            </div>
           </div>
         </div>
       </form>
+      {/* ADD TITHE NUMBER MODAL */}
+      <AddTitheModal
+        closeModal={() => setDisplayAddTitheModal(false)}
+        displayAddTitheModal={displayAddTitheModal}
+        {...props}
+      />
     </>
   );
 }

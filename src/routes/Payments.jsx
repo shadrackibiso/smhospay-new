@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "../css/home.css";
 import Header from "../components/Header";
+import PaymentsFilter from "../components/PaymentsFilter";
 import empty from "../images/empty.svg";
 import { FaHandHoldingUsd } from "react-icons/fa";
 import Sidebar from "../components/Sidebar";
@@ -15,6 +16,47 @@ import PaymentPanel from "../components/PaymentPanel";
 function Payments(props) {
   const [displayPaymentPanel, setDisplayPaymentPanel] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState(null);
+  const [paymentType, setPaymentType] = useState("all");
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
+  const [givings, setGivings] = useState(props.givings);
+
+  const handleFilter = () => {
+    let givings = props.givings.filter((giving) => {
+      // filter all payments without date range
+      if (paymentType.toLowerCase() === "all" && !startDate) {
+        return giving;
+      }
+      // filter all payments with date range
+      if (paymentType.toLowerCase() === "all" && startDate) {
+        return (
+          moment(giving.date.toDate()).format("L") >=
+            moment(startDate).format("L") &&
+          moment(giving.date.toDate()).format("L") <=
+            moment(endDate).format("L")
+        );
+      }
+      // filter selected payment type without date range
+      if (paymentType.toLowerCase() !== "all" && !startDate) {
+        return giving.type.toLowerCase() === paymentType.toLowerCase();
+      }
+      // filter selected payment type with date range
+      if (paymentType.toLowerCase() !== "all" && startDate) {
+        return (
+          giving.type.toLowerCase() === paymentType.toLowerCase() &&
+          moment(giving.date.toDate()).format("L") >=
+            moment(startDate).format("L") &&
+          moment(giving.date.toDate()).format("L") <=
+            moment(endDate).format("L")
+        );
+      }
+    });
+
+    setGivings(givings);
+    // console.log(givings, paymentType);
+    // console.log(moment(givings[0].date.toDate()).format("L"));
+    // console.log(moment(startDate).format("L"));
+  };
 
   const showPayment = (props) => {
     setSelectedPayment(props);
@@ -44,8 +86,18 @@ function Payments(props) {
         >
           {/* HEADER */}
           <Header title={"Payment History"} {...props} />
+          {/* FILTER */}
+          <PaymentsFilter
+            setPaymentType={setPaymentType}
+            startDate={startDate}
+            setStartDate={setStartDate}
+            endDate={endDate}
+            setEndDate={setEndDate}
+            handleFilter={handleFilter}
+            totalPayments={givings && givings.length}
+          />
           {/* CONTENT BODY */}
-          <div className="fullHeight">
+          <div className="fullHeight-f">
             <div className="container px-0">
               {/* LOADER */}
               <div
@@ -78,24 +130,42 @@ function Payments(props) {
                   <div className="transHistoryContainer d-none d-md-block">
                     {/* Payment TABLE HEAD */}
                     <div className="transHistoryCard transHistoryHeader d-flex align-items-center">
-                      <div className="col-md-1 p-0">
-                        {/* <div className="transHistoryCardIcon totalIcon">
+                      {/* <div className="col-md-1 p-0">
+                        <div className="transHistoryCardIcon totalIcon">
                           <FaHandHoldingUsd />
-                        </div> */}
-                      </div>
+                        </div>
+                      </div> */}
                       <div className="col-md-3 p-0">Amount</div>
-                      <div className="col-md-2 p-0">Payment Type</div>
-                      <div className="col-md-3 p-0">Date</div>
-                      <div className="col-md-3 p-0">
-                        {props.accountType &&
-                        props.accountType.toLowerCase() === "admin"
-                          ? "Tithe Number"
-                          : "Note"}
+                      <div
+                        className="col-md-3 p-0"
+                        style={{
+                          display:
+                            props.accountType &&
+                            props.accountType.toLowerCase() === "admin"
+                              ? "block"
+                              : "none",
+                        }}
+                      >
+                        User
+                      </div>
+                      <div className="col-md-3 p-0">Payment Type</div>
+                      <div className="col-md-3 p-0">Paid On</div>
+                      <div
+                        className="col-md-3 p-0"
+                        style={{
+                          display:
+                            props.accountType &&
+                            props.accountType.toLowerCase() !== "admin"
+                              ? "block"
+                              : "none",
+                        }}
+                      >
+                        Note
                       </div>
                     </div>
                     {/* PaymentS LOOP */}
-                    {props.givings &&
-                      props.givings
+                    {givings &&
+                      givings
                         .sort((a, b) => (a.date > b.date ? -1 : 1))
                         .map((giving) => (
                           <div
@@ -108,7 +178,7 @@ function Payments(props) {
                               })
                             }
                           >
-                            <div className="col-2 col-md-1 p-0">
+                            {/* <div className="col-2 col-md-1 p-0">
                               <div
                                 className={
                                   (giving.type === "tithe" &&
@@ -121,22 +191,36 @@ function Payments(props) {
                               >
                                 <FaHandHoldingUsd />
                               </div>
-                            </div>
+                            </div> */}
+                            {/* Amount */}
                             <div className="col-7 col-md-3 p-0">
-                              <div className="transHistoryAmount">
+                              <div className="transHistoryAmount transHistoryText-n">
                                 ₦{numeral(giving.amount).format("0,0")}
                               </div>
                             </div>
-                            <div className="col-md-2 p-0 transHistoryText-n text-capitalize">
-                              {giving.type}
-                            </div>
-                            <div className="col-md-3 p-0 transHistoryText-n">
-                              {moment(giving.date.toDate()).format("LLLL")}
-                            </div>
+                            {/* User */}
                             <div
                               className="col-md-3 p-0 transHistoryText-n"
                               style={{
                                 display:
+                                  props.accountType &&
+                                  props.accountType.toLowerCase() === "admin"
+                                    ? "block"
+                                    : "none",
+                              }}
+                            >
+                              {giving.givenBy}
+                            </div>
+                            {/* Payment Type */}
+                            <div className="col-md-3 p-0 transHistoryText-n text-capitalize">
+                              {giving.type}
+                            </div>
+                            {/* Note */}
+                            <div
+                              className="col-md-3 p-0 transHistoryText-n"
+                              style={{
+                                display:
+                                  props.accountType &&
                                   props.accountType.toLowerCase() !== "admin"
                                     ? "block"
                                     : "none",
@@ -144,17 +228,11 @@ function Payments(props) {
                             >
                               {giving.note ? giving.note : "-"}
                             </div>
-                            <div
-                              className="col-md-3 p-0 transHistoryText-n"
-                              style={{
-                                display:
-                                  props.accountType.toLowerCase() === "admin"
-                                    ? "block"
-                                    : "none",
-                              }}
-                            >
-                              {giving.titheNumber}
+                            {/* Date */}
+                            <div className="col-md-3 p-0 transHistoryText-n">
+                              {moment(giving.date.toDate()).format("LLL")}
                             </div>
+                            {/*  */}
                           </div>
                         ))}
                   </div>
@@ -182,8 +260,8 @@ function Payments(props) {
                   }}
                 >
                   <div className="transHistoryContainer d-md-none">
-                    {props.givings &&
-                      props.givings
+                    {givings &&
+                      givings
                         .sort((a, b) => (a.date > b.date ? -1 : 1))
                         .map((giving) => (
                           <Link
@@ -231,7 +309,7 @@ function Payments(props) {
             </div>
           </div>
           {/* MOBILE NAV */}
-          <MobileNav page="Payments" />
+          <MobileNav page="payments" />
         </div>
       </div>
       <PaymentPanel

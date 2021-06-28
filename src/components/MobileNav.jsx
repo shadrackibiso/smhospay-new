@@ -1,10 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import {
-  AiOutlineHome,
-  AiFillPlusCircle,
-  AiOutlineHistory,
-} from "react-icons/ai";
+import { MdReceipt, MdHome, MdAddCircle } from "react-icons/md";
 
 function MobileNav(props) {
   return (
@@ -13,24 +9,27 @@ function MobileNav(props) {
       <NavLink to="/">
         <div className={props.page === "home" ? "navBtn active" : "navBtn"}>
           <div className="navBtnIcon">
-            <AiOutlineHome />
+            <MdHome />
           </div>
+          <div className="mobileNavLabel">Home</div>
         </div>
       </NavLink>
       {/* ====== */}
       <NavLink to="/pay">
         <div className={props.page === "pay" ? "navBtn active" : "navBtn"}>
           <div className="navBtnIcon payBtn">
-            <AiFillPlusCircle />
+            <MdAddCircle />
           </div>
+          <div className="mobileNavLabel">Pay/Give</div>
         </div>
       </NavLink>
       {/* ====== */}
       <NavLink to="/payments">
         <div className={props.page === "payments" ? "navBtn active" : "navBtn"}>
           <div className="navBtnIcon">
-            <AiOutlineHistory />
+            <MdReceipt />
           </div>
+          <div className="mobileNavLabel">Payments</div>
         </div>
       </NavLink>
       {/* ====== */}

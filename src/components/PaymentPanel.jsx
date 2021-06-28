@@ -22,7 +22,7 @@ function PaymentPanel(props) {
         {/* MAIN CONTENT */}
         <div className="contentWrap">
           {/* HEADER */}
-          <Header title="Payment" close={() => props.closePanel()} />
+          <Header title="Payment Details" close={() => props.closePanel()} />
           {/* CONTENT BODY */}
           <div className="fullHeight">
             <div className="container px-4">
@@ -63,6 +63,23 @@ function PaymentPanel(props) {
                       {giving && moment(giving.date).format("LLL")}
                     </div>
                   </div>
+                  {/* given by */}
+                  <div
+                    style={{
+                      display:
+                        props.state.accountType === "admin" ? "block" : "none",
+                    }}
+                  >
+                    {/* divider */}
+                    <hr />
+                    {/* -- */}
+                    <div className="d-flex align-items-center justify-content-between">
+                      <div className="transHistoryText thpText">Given By</div>
+                      <div className="transHistoryText thpText">
+                        {giving && giving.givenBy}
+                      </div>
+                    </div>
+                  </div>
                   {/* tithe number */}
                   <div
                     style={{
@@ -78,7 +95,9 @@ function PaymentPanel(props) {
                         Tithe Number
                       </div>
                       <div className="transHistoryText thpText">
-                        {giving && giving.titheNumber}
+                        {giving && giving.titheNumber
+                          ? giving.titheNumber
+                          : "-"}
                       </div>
                     </div>
                   </div>

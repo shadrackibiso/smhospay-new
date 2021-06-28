@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import Dashboard from "./Dashboard";
+import Users from "./Users";
 import Payments from "./Payments";
 import Payment from "./Payment";
 import Pay from "./pay";
@@ -39,6 +40,7 @@ function AppRouter(props) {
             state={props}
             exact
           />
+          <AuthRoute path="/users" component={Users} state={props} exact />
           <AuthRoute path="/pay" component={Pay} state={props} exact />
         </Switch>
       </div>

@@ -135,7 +135,7 @@ function RecentPayments(props) {
                   </div>
                   <div className="col-7 col-md-6 p-0">
                     <div className="transHistoryAmount">
-                      ₦{numeral(giving.amount).format("0,0")}
+                      NGN {numeral(giving.amount).format("0,0")}
                     </div>
                     <div className="transHistoryText">
                       {moment(giving.date.toDate()).format("LL")}
