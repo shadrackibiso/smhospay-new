@@ -61,6 +61,8 @@ function Signup(props) {
             createUserProfile(userCredential);
             // add user detail to local storage for login Authentication
             localStorage.setItem("user", JSON.stringify(true));
+            // show tithe number form
+            setDisplayTitheNumberForm(true);
           })
           .catch((error) => {
             toast.error(error.message);
@@ -68,8 +70,6 @@ function Signup(props) {
           })
           .then(() => {
             setLoading(false);
-            // show tithe number form
-            setDisplayTitheNumberForm(true);
           });
       } else {
         toast.error("Password must be greater than 6 characters");
@@ -144,7 +144,7 @@ function Signup(props) {
       {/* MAIN CONTENT */}
       <div className="signUpContainer">
         <div className="container">
-          <div className="row d-flex flex-column align-items-center justify-content-center">
+          <div className="row py-4 py-md-0 d-flex flex-column align-items-center justify-content-center">
             <div>
               <img src={logo} width="150px" className="mb-5" />
             </div>

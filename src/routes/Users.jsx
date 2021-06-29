@@ -55,7 +55,7 @@ function Users(props) {
     <>
       <div className="pageContainer">
         {/* SIDEBAR */}
-        <Sidebar page="users" />
+        <Sidebar page="users" {...props} />
         {/* PAGE LOADER */}
         <div
           className="loaderContainer contentWrap"

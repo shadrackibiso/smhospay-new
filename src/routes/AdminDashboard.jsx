@@ -14,7 +14,7 @@ function AdminDashboard(props) {
     <>
       <div className="pageContainer">
         {/* SIDEBAR */}
-        <Sidebar page="home" />
+        <Sidebar page="home" {...props} />
         {/* LOADER */}
         <div
           className="loaderContainer contentWrap"

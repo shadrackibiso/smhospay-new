@@ -413,7 +413,7 @@ label {
   border-radius: 5px;
   padding: 0.5em 1em;
   /* background: #f2f2f2; */
-  /* width: 100%; */
+  width: 100%;
 }
 .filterInputContainer {
   border: 1px solid #e6e6e6;
@@ -421,7 +421,7 @@ label {
   padding: 0.5em;
   font-size: 0.9rem;
   /* background: #f2f2f2; */
-  /* width: 100%; */
+  width: initial;
 }
 ::placeholder {
   color: rgb(150, 150, 150);
@@ -444,7 +444,7 @@ label {
 /* SIGNUP PAGE */
 .signUpContainer {
   background: #f7f7f7;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;

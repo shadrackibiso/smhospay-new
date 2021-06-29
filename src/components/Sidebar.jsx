@@ -50,7 +50,13 @@ function Sidebar(props) {
             </div>
           </NavLink>
           {/* USERS */}
-          <NavLink to="/users">
+          <NavLink
+            to="/users"
+            style={{
+              display:
+                props.accountType && props.accountType !== "admin" && "none",
+            }}
+          >
             <div
               className={
                 props.page === "users" ? "sidebarNav active" : "sidebarNav"

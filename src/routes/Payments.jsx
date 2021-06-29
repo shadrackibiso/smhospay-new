@@ -67,7 +67,7 @@ function Payments(props) {
     <>
       <div className="pageContainer">
         {/* SIDEBAR */}
-        <Sidebar page="payments" />
+        <Sidebar page="payments" {...props} />
         {/* PAGE LOADER */}
         <div
           className="loaderContainer contentWrap"
@@ -124,7 +124,8 @@ function Payments(props) {
                 <div
                   className="col-12"
                   style={{
-                    display: !props.givings && "none",
+                    display:
+                      props.givings && props.givings.length === 0 && "none",
                   }}
                 >
                   <div className="transHistoryContainer d-none d-md-block">

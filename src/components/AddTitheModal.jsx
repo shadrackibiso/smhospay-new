@@ -67,7 +67,7 @@ function AddTitheModal(props) {
         {/* MODAL BACKDROP */}
         <div className="backdrop" onClick={props.closeModal}></div>
         {/* MODAL CONTENT */}
-        <div className="modalContent px-5 py-5 d-flex align-items-center justify-content-center flex-column text-center animate__animated animate__zoomIn">
+        <div className="modalContent px-4 px-md-5 py-5 d-flex align-items-center justify-content-center flex-column text-center animate__animated animate__zoomIn">
           {/* ==== 
               TITHE NUMBER FORM
             ==== */}
