@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import ProfileModal from "../components/ProfileModal";
 import { MdMenu } from "react-icons/md";
 import { BiUser } from "react-icons/bi";
+import ProfileModal from "../components/ProfileModal";
 
 function Header(props) {
-  const [showProfileModal, setDisplayModal] = useState(false);
+  const [displayPopup, setDisplayPopup] = useState(false);
+  const [displayProfileModal, setDisplayProfileModal] = useState(false);
 
   const showSidebar = () => {
     document
@@ -22,6 +23,28 @@ function Header(props) {
         "animate__fadeIn"
       );
   };
+
+  const ProfileMenu = () => (
+    <div
+      className="popupContainer hide"
+      style={{ display: displayPopup && "block" }}
+    >
+      <div
+        className="popupBackdrop"
+        onClick={() => setDisplayPopup(false)}
+      ></div>
+      <div className="popupContent profileMenuContainer">
+        <div className="profileMenu">
+          <div className="profileMenuItem d-flex align-items-center">
+            <span className="mr-3">
+              <BiUser className="d-flex align-items-center" />
+            </span>
+            <span>profile</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <>
@@ -43,19 +66,26 @@ function Header(props) {
               </h4>
             </div>
             {/* avatar */}
-            <div className="profilePic" onClick={() => setDisplayModal(true)}>
-              <div className="profilePicText d-flex align-items-center">
-                {/* {props.firstName && props.firstName.slice(0, 1)} */}
-                <BiUser />
+            <div className="popupWrapper">
+              <div
+                className="profilePic cursor-pointer"
+                // onClick={() => setDisplayPopup((prevState) => !prevState)}
+                onClick={() => setDisplayProfileModal(true)}
+              >
+                <div className="d-flex align-items-center">
+                  <BiUser />
+                </div>
               </div>
+              {/* Profile Menu */}
+              <ProfileMenu />
             </div>
+            {/* profile modal */}
+            <ProfileModal
+              {...props}
+              showProfileModal={displayProfileModal}
+              closeModal={() => setDisplayProfileModal(false)}
+            />
           </div>
-          {/* PROFILE MODAL */}
-          <ProfileModal
-            {...props}
-            showProfileModal={showProfileModal}
-            closeModal={() => setDisplayModal(false)}
-          />
         </div>
       </div>
     </>

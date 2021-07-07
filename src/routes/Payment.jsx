@@ -80,7 +80,7 @@ function Transaction(props) {
                       {moment(giving.date).format("LLL")}
                     </div>
                   </div>
-                  {/* tithe number */}
+                  {/* User Email */}
                   <div
                     style={{
                       display: props.accountType === "admin" ? "block" : "none",
@@ -90,9 +90,45 @@ function Transaction(props) {
                     <hr />
                     {/* -- */}
                     <div className="d-flex align-items-center justify-content-between">
-                      <div className="transHistoryText thpText">Given By</div>
+                      <div className="transHistoryText thpText">User Email</div>
                       <div className="transHistoryText thpText">
-                        {giving && giving.givenBy}
+                        {giving && giving.givenBy.email}
+                      </div>
+                    </div>
+                  </div>
+                  {/* User Name */}
+                  <div
+                    style={{
+                      display: props.accountType === "admin" ? "block" : "none",
+                    }}
+                  >
+                    {/* divider */}
+                    <hr />
+                    {/* -- */}
+                    <div className="d-flex align-items-center justify-content-between">
+                      <div className="transHistoryText thpText">Full Name</div>
+                      <div className="transHistoryText thpText">
+                        {giving && giving.givenBy.fullName}
+                      </div>
+                    </div>
+                  </div>
+                  {/* Tithe Number */}
+                  <div
+                    style={{
+                      display: props.accountType === "admin" ? "block" : "none",
+                    }}
+                  >
+                    {/* divider */}
+                    <hr />
+                    {/* -- */}
+                    <div className="d-flex align-items-center justify-content-between">
+                      <div className="transHistoryText thpText">
+                        Tithe Number
+                      </div>
+                      <div className="transHistoryText thpText">
+                        {giving && giving.titheNumber
+                          ? giving.titheNumber
+                          : "-"}
                       </div>
                     </div>
                   </div>

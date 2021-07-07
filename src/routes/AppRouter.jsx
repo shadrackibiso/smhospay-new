@@ -23,7 +23,7 @@ function AppRouter(props) {
           </Route>
           <AuthRoute path="/" component={Dashboard} state={props} exact />
           <AuthRoute
-            path="/adminDashboard"
+            path="/admin-dashboard"
             component={AdminDashboard}
             state={props}
             exact

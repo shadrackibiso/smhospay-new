@@ -11,7 +11,7 @@ import { Redirect } from "react-router-dom";
 
 function Dashboard(props) {
   return props.accountType && props.accountType.toLowerCase() === "admin" ? (
-    <Redirect to="/adminDashboard" />
+    <Redirect to="/admin-dashboard" />
   ) : (
     <>
       <div className="pageContainer">

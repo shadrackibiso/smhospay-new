@@ -5,6 +5,7 @@ import { BiUser } from "react-icons/bi";
 
 function ProfileModal(props) {
   const [redirect, setRedirect] = useState(false);
+
   const logOut = () => {
     auth.signOut().then(localStorage.clear("user"));
     setRedirect(true);
@@ -30,8 +31,11 @@ function ProfileModal(props) {
             {props.firstName && props.firstName}{" "}
             {props.lastName && props.lastName}
           </h4>
-          <p className="mb-1">{props.email}</p>
-          <p style={{ display: !props.titheNumber && "none" }}>
+          <p className="mb-1 profileModalText">{props.email}</p>
+          <p
+            className="profileModalText"
+            style={{ display: !props.titheNumber && "none" }}
+          >
             Tithe Number: {props.titheNumber}
           </p>
           <button

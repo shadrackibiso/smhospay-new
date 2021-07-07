@@ -26,10 +26,14 @@
   background: #007db70c;
 }
 
-.DateRangePickerInput_calendarIcon {
+/* .DateRangePickerInput_calendarIcon {
   padding: 0.5em;
-}
+} */
 .DateRangePickerInput__withBorder {
+  border-radius: 3px;
+  border: 1px solid #e6e6e6;
+}
+.SingleDatePickerInput__withBorder {
   border-radius: 3px;
   border: 1px solid #e6e6e6;
 }
@@ -39,6 +43,13 @@
 .DayPickerKeyboardShortcuts_show__bottomRight::before {
   border-right-color: #007cb7;
 }
-.DateInput__small:nth-child(2) {
-  width: 120px;
+.SingleDatePicker,
+.SingleDatePickerInput {
+  width: 100%;
 }
+.DateInput__small {
+  width: 130px;
+}
+/* .DateInput__small:nth-child(2) {
+  width: 120px;
+} */

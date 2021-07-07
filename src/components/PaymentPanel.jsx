@@ -24,7 +24,7 @@ function PaymentPanel(props) {
           {/* HEADER */}
           <Header title="Payment Details" close={() => props.closePanel()} />
           {/* CONTENT BODY */}
-          <div className="fullHeight">
+          <div className="fullHeight py-4">
             <div className="container px-4">
               {/* PAYMENT DETAILS */}
               <div>
@@ -63,7 +63,7 @@ function PaymentPanel(props) {
                       {giving && moment(giving.date).format("LLL")}
                     </div>
                   </div>
-                  {/* given by */}
+                  {/* User Email */}
                   <div
                     style={{
                       display:
@@ -74,9 +74,26 @@ function PaymentPanel(props) {
                     <hr />
                     {/* -- */}
                     <div className="d-flex align-items-center justify-content-between">
-                      <div className="transHistoryText thpText">Given By</div>
+                      <div className="transHistoryText thpText">User Email</div>
+                      <div className="transHistoryText thpText thpGivingEmail">
+                        {giving && giving.givenBy.email}
+                      </div>
+                    </div>
+                  </div>
+                  {/* User Name */}
+                  <div
+                    style={{
+                      display:
+                        props.state.accountType === "admin" ? "block" : "none",
+                    }}
+                  >
+                    {/* divider */}
+                    <hr />
+                    {/* -- */}
+                    <div className="d-flex align-items-center justify-content-between">
+                      <div className="transHistoryText thpText">Full Name</div>
                       <div className="transHistoryText thpText">
-                        {giving && giving.givenBy}
+                        {giving && giving.givenBy.fullName}
                       </div>
                     </div>
                   </div>

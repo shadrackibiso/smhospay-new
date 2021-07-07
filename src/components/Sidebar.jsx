@@ -54,8 +54,9 @@ function Sidebar(props) {
             to="/users"
             style={{
               display:
-                props.accountType && props.accountType !== "admin" && "none",
+                props.accountType && props.accountType === "admin" && "block",
             }}
+            className="hide"
           >
             <div
               className={

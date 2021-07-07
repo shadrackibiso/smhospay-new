@@ -32,7 +32,7 @@ function AdminDashboard(props) {
           }}
         >
           {/* HEADER */}
-          <Header {...props} title={`Hello, ${props.firstName}`} />
+          <Header {...props} title={`Hello, Admin`} />
           {/* CONTENT BODY */}
           <div className="fullHeight">
             <div className="container px-0">

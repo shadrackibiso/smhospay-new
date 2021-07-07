@@ -2,44 +2,52 @@ import React, { useState } from "react";
 import "../css/home.css";
 import Header from "../components/Header";
 import empty from "../images/empty.svg";
-import { FaHandHoldingUsd } from "react-icons/fa";
 import Sidebar from "../components/Sidebar";
 import MobileNav from "../components/MobileNav";
 import moment from "moment";
 import { CircleSpinner } from "react-spinners-kit";
 import { ClassicSpinner } from "react-spinners-kit";
-import { Link } from "react-router-dom";
 import UsersFilter from "../components/UsersFilter";
+import UserPanel from "../components/UserPanel";
 
 function Users(props) {
-  const [userEmail, setUserEmail] = useState("");
+  const [displayUserPanel, setDisplayUserPanel] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [searchValue, setSearchValue] = useState("");
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
-  const [users, setUsers] = useState(props.users);
+  const [sortType, setSortType] = useState("users(n-o)");
+  const [sortFunction, setSortFunction] = useState(() => {
+    return (a, b) => (a.createdAt > b.createdAt ? -1 : 1);
+  });
+  const [filtered, setFiltered] = useState(false);
+  const [executed, setExecuted] = useState(false);
+  const [users, setUsers] = useState();
+  const [displayedUsers, setDisplayedUsers] = useState();
+  const [sliceEnd, setSliceEnd] = useState(20);
+  let usersPerPage = 20;
+
+  const showMoreUsers = () => {
+    setSliceEnd(sliceEnd + usersPerPage);
+    setDisplayedUsers(users.slice(0, sliceEnd + usersPerPage));
+  };
+
+  const checkUsers = () => {
+    setUsers(props.users);
+    setDisplayedUsers(props.users.slice(0, usersPerPage));
+    setExecuted(true);
+  };
 
   const handleFilter = () => {
-    let users = props.users.filter((user) => {
-      // filter all users without date range
-      if (user.email.toLowerCase().includes(" ") && !startDate) {
+    // filter by registration date
+    let usersByDate = props.users.filter((user) => {
+      // filter users without date range
+      if (!startDate) {
         return user;
       }
-      // filter all users with date range
-      if (user.email.toLowerCase().includes(" ") && startDate) {
+      // filter users with date range
+      if (startDate) {
         return (
-          moment(user.createdAt.toDate()).format("L") >=
-            moment(startDate).format("L") &&
-          moment(user.createdAt.toDate()).format("L") <=
-            moment(endDate).format("L")
-        );
-      }
-      // filter selected users without date range
-      if (user.email.toLowerCase().includes(userEmail) && !startDate) {
-        return user.email.toLowerCase().includes(userEmail);
-      }
-      // filter selected users type with date range
-      if (user.email.toLowerCase().includes(userEmail) && startDate) {
-        return (
-          user.email.toLowerCase().includes(userEmail) &&
           moment(user.createdAt.toDate()).format("L") >=
             moment(startDate).format("L") &&
           moment(user.createdAt.toDate()).format("L") <=
@@ -48,11 +56,61 @@ function Users(props) {
       }
     });
 
-    setUsers(users);
+    // sort filtered users
+    if (sortType === "users(n-o)") {
+      setSortFunction(() => {
+        return (a, b) => (a.createdAt > b.createdAt ? -1 : 1);
+      });
+    } else if (sortType === "users(o-n)") {
+      setSortFunction(() => {
+        return (a, b) => (a.createdAt > b.createdAt ? 1 : -1);
+      });
+    } else if (sortType === "name(a-z)") {
+      setSortFunction(() => {
+        return (a, b) =>
+          a.firstName.toLowerCase().localeCompare(b.firstName.toLowerCase());
+      });
+    } else if (sortType === "name(z-a)") {
+      setSortFunction(() => {
+        return (a, b) =>
+          b.firstName.toLowerCase().localeCompare(a.firstName.toLowerCase());
+      });
+    } else {
+      setSortFunction(() => {
+        return (a, b) => (a.createdAt > b.createdAt ? -1 : 1);
+      });
+    }
+
+    setUsers(usersByDate);
+    setDisplayedUsers(usersByDate.slice(0, usersPerPage));
+    setSliceEnd(usersPerPage);
+    setFiltered(true);
+  };
+
+  const resetFilter = () => {
+    setUsers(props.users);
+    setDisplayedUsers(props.users.slice(0, usersPerPage));
+
+    setSortType("users(n-o)");
+    setSortFunction(() => {
+      return (a, b) => (a.createdAt > b.createdAt ? -1 : 1);
+    });
+    setStartDate();
+    setEndDate();
+
+    setFiltered(false);
+    setSliceEnd(usersPerPage);
+  };
+
+  const showUser = (props) => {
+    setSelectedUser(props);
+    setDisplayUserPanel(true);
   };
 
   return (
     <>
+      {/* check users once on page load */}
+      {!props.loading && props.users && !executed && checkUsers()}
       <div className="pageContainer">
         {/* SIDEBAR */}
         <Sidebar page="users" {...props} />
@@ -76,12 +134,17 @@ function Users(props) {
           <Header title={`Users`} {...props} />
           {/* FILTER */}
           <UsersFilter
-            setUserEmail={setUserEmail}
+            searchValue={searchValue}
+            setSearchValue={setSearchValue}
+            sortType={sortType}
+            setSortType={setSortType}
             startDate={startDate}
             setStartDate={setStartDate}
             endDate={endDate}
             setEndDate={setEndDate}
             handleFilter={handleFilter}
+            resetFilter={resetFilter}
+            filtered={filtered}
             totalUsers={users && users.length}
           />
           {/* CONTENT BODY */}
@@ -126,28 +189,71 @@ function Users(props) {
                     {/* USERS LOOP */}
                     {users &&
                       users
-                        .sort((a, b) => (a.createdAt > b.createdAt ? -1 : 1))
+                        .filter((user) => {
+                          let userFullName = user.firstName + user.lastName;
+
+                          return (
+                            user.email.toLowerCase().includes(searchValue) ||
+                            userFullName.toLowerCase().includes(searchValue)
+                          );
+                        })
+                        .sort(sortFunction)
+                        .slice(0, sliceEnd)
                         .map((user) => (
                           <div
                             className="transHistoryCard d-flex align-items-center"
                             key={user.id}
+                            onClick={() =>
+                              showUser({
+                                ...user,
+                                createdAt: user.createdAt.toDate(),
+                              })
+                            }
                           >
+                            {/* user email */}
                             <div className="col-7 col-md-4 p-0">
                               <div className="transHistoryText-n">
                                 {user.email}
                               </div>
                             </div>
+                            {/* user full name */}
                             <div className="col-md-3 p-0 transHistoryText-n text-capitalize">
                               {user.firstName + " " + user.lastName}
                             </div>
+                            {/* tithe number */}
                             <div className="col-md-2 p-0 transHistoryText-n">
-                              {user.titheNumber ? user.titheNumber : "-"}
+                              {user.titheNumber ? (
+                                <span className="paymentType">
+                                  {user.titheNumber}
+                                </span>
+                              ) : (
+                                "-"
+                              )}
                             </div>
+                            {/* registration date */}
                             <div className="col-md-3 p-0 transHistoryText-n text-capitalize">
                               {moment(user.createdAt.toDate()).format("LL")}
                             </div>
                           </div>
                         ))}
+                  </div>
+                  {/* load more button */}
+                  <div
+                    className="align-items-center justify-content-center mt-5 hide"
+                    style={{
+                      display:
+                        displayedUsers &&
+                        users &&
+                        displayedUsers.length !== users.length &&
+                        "flex",
+                    }}
+                  >
+                    <button
+                      className="subBtn py-2 px-3"
+                      onClick={showMoreUsers}
+                    >
+                      Load More
+                    </button>
                   </div>
                 </div>
                 {/* empty illustration */}
@@ -163,49 +269,6 @@ function Users(props) {
                     <i>no user registered</i>
                   </span>
                 </div>
-                {/* USERS MOBILE */}
-                <div
-                  className="col-12"
-                  style={{
-                    display: !props.users && "none",
-                  }}
-                >
-                  <div className="transHistoryContainer d-md-none">
-                    {users &&
-                      users
-                        .sort((a, b) => (a.date > b.date ? -1 : 1))
-                        .map((user) => (
-                          <Link
-                            to={{
-                              pathname: `/payment/${user.id}`,
-                              state: {
-                                ...user,
-                                createdAt: user.createdAt.toDate(),
-                              },
-                            }}
-                            key={user.id}
-                            className="rowLink transHistoryCard d-flex align-items-center"
-                          >
-                            <div className="col-2 col-md-1 mr-md-4 p-0">
-                              <div>
-                                <FaHandHoldingUsd />
-                              </div>
-                            </div>
-                            <div className="col-7 col-md-6 p-0">
-                              <div className="transHistoryAmount">
-                                {user.email}
-                              </div>
-                              <div className="transHistoryText">
-                                {user.firstName}
-                              </div>
-                            </div>
-                            <div className="col-3 col-md-4 p-0 text-right transHistoryText">
-                              {user.lastName}
-                            </div>
-                          </Link>
-                        ))}
-                  </div>
-                </div>
               </div>
             </div>
           </div>
@@ -213,6 +276,15 @@ function Users(props) {
           <MobileNav page="users" />
         </div>
       </div>
+      <UserPanel
+        selectedUser={selectedUser}
+        openPanel={displayUserPanel}
+        closePanel={() => setDisplayUserPanel(false)}
+        state={{
+          accountType: props.accountType && props.accountType.toLowerCase(),
+          givings: props.givings && props.givings,
+        }}
+      />
     </>
   );
 }

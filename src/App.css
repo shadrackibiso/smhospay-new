@@ -35,6 +35,9 @@ a {
 a:hover {
   text-decoration: none !important;
 }
+select {
+  background-color: inherit !important;
+}
 .pageContainer {
   background: #f7f7f7;
   display: flex;
@@ -58,8 +61,8 @@ a:hover {
   width: 100%;
 }
 .profilePic {
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   border-radius: 50px;
   object-fit: cover;
   display: flex;
@@ -68,8 +71,12 @@ a:hover {
   overflow: hidden;
   border: 1px solid rgb(202, 202, 202);
   cursor: pointer;
-  background-color: #f5f5f5;
+  /* background-color: #f5f5f5; */
   color: rgb(163, 163, 163);
+}
+.userPanelProfilePic {
+  width: 50px;
+  height: 50px;
 }
 .profilePic img {
   width: 100%;
@@ -81,6 +88,9 @@ a:hover {
   height: 75px;
   font-size: 2rem;
 }
+.profileModalText {
+  color: grey;
+}
 .mainBtn {
   background: var(--color-1);
   border: 1px solid var(--color-1);
@@ -90,6 +100,7 @@ a:hover {
   font-size: 0.9rem;
   text-transform: capitalize;
   transition: 0.2s ease;
+  font-weight: bold;
 }
 .mainBtnRound {
   background: var(--color-1);
@@ -100,12 +111,18 @@ a:hover {
   font-size: 0.8rem;
   text-transform: capitalize;
   transition: 0.2s ease;
+  font-weight: bold;
 }
 .mainBtn:hover,
 .mainBtnRound:hover {
   background-color: var(--color-3);
   border: 1px solid var(--color-3);
   color: white;
+}
+.mainBtn:focus,
+.mainBtnRound:focus,
+.subBtn:focus {
+  outline: none;
 }
 .subBtn {
   background: inherit;
@@ -241,14 +258,20 @@ a:hover {
   border: 1px solid #eeeeee;
   padding: 0 0.5em;
 }
-.transHistoryCard {
+.transHistoryCard,
+.userPanelTransHistoryCard {
   background: #fefeff;
   padding: 1em;
   height: 100%;
   border-bottom: 1px solid #eeeeee;
   cursor: pointer;
 }
-.transHistoryCard:last-child {
+.userPanelTransHistoryCard {
+  cursor: initial;
+  padding: 0.5em 0;
+}
+.transHistoryCard:last-child,
+.userPanelTransHistoryCard:last-child {
   border-bottom: none;
 }
 .transHistoryCard:hover {
@@ -337,10 +360,9 @@ a:hover {
 .thpText {
   font-size: 0.9rem;
 }
-/* .thpNoteText {
-  color: black;
-  opacity: 1;
-} */
+.thpGivingEmail {
+  text-transform: initial;
+}
 
 /* PAY PAGE */
 .payCard {
@@ -437,8 +459,19 @@ label {
 }
 .filterBtn,
 .filterLabel {
-  color: #484848;
-  /* font-weight: 300; */
+  color: #6b6b6b;
+  font-weight: bold;
+}
+.filterResetBtn {
+  background-color: #fcfcfc;
+  border-color: #f1f1f1;
+  color: #555555;
+  font-weight: bold;
+}
+.filterResetBtn:hover {
+  background-color: #f2f2f2;
+  border-color: #ececec;
+  color: #555555;
 }
 
 /* SIGNUP PAGE */
@@ -507,6 +540,11 @@ label {
   background: var(--color-1) !important;
   color: white !important;
 }
+.textBtn {
+  color: var(--color-1);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
 .panelTitle {
   color: rgb(66, 66, 66);
 }
@@ -532,11 +570,83 @@ hr {
   color: var(--color-1);
   font-size: 50px;
 }
+.hide {
+  display: none;
+}
+.cursor-pointer {
+  cursor: pointer;
+}
+/* filter panel */
+.popupWrapper {
+  position: relative;
+}
+.popupBackdrop {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  z-index: 998;
+}
+.popupContent {
+  position: absolute;
+  left: 0;
+  top: 35px;
+  z-index: 999;
+  background: white;
+  padding: 1em;
+  /* border: 1px solid #eeeeee; */
+  border-radius: 3px;
+  box-shadow: 0 2px 4px rgb(0 0 0 / 10%), 0 0 0 1px rgb(0 0 0 / 5%);
+  width: 250px;
+}
+.profileMenuContainer {
+  left: initial;
+  right: 0;
+  top: 35px;
+  width: 180px;
+  padding: 1em 0;
+}
+.profileMenuItem {
+  text-transform: capitalize;
+  opacity: 0.5;
+  cursor: pointer;
+  padding: 0.5em 1em;
+}
+.profileMenuItem:hover {
+  background-color: #eeeeee;
+}
+.filterLabel {
+  font-size: 0.9rem;
+}
+.filterBtn {
+  color: grey;
+  cursor: pointer;
+}
+.filterBtnActive {
+  color: #3bb75e;
+  cursor: pointer;
+  font-weight: bold;
+}
+.vl {
+  border-left: 1px solid #e6e6e6;
+  height: 40px;
+  margin: 0px 1em;
+}
+.paymentType {
+  border: 1px solid #cfcfcf;
+  padding: 0.1em 0.5em;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  color: black;
+  opacity: 1;
+  font-weight: 500;
+}
 
 /* TABLET */
 @media screen and (max-width: 1024px) {
   .contentWrap {
-    width: 100vw;
+    /* width: 100vw; */
     height: 100vh;
     overflow: auto;
     position: relative;
@@ -613,7 +723,7 @@ hr {
   .fullHeight-f {
     padding: 1em;
     padding-bottom: 80px;
-    height: calc(100vh - 60px);
+    height: calc(100vh - 120px);
   }
   .statsCardContainer {
     background: var(--color-2);
@@ -755,5 +865,11 @@ hr {
   .mobileNavLabel {
     font-size: 0.58rem;
     color: rgb(95, 95, 95);
+  }
+  .filterBtn {
+    font-size: 0.9rem;
+  }
+  .filterInputContainer {
+    width: 100%;
   }
 }

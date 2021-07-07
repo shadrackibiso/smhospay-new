@@ -17,9 +17,26 @@ function Payments(props) {
   const [displayPaymentPanel, setDisplayPaymentPanel] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState(null);
   const [paymentType, setPaymentType] = useState("all");
+  const [paymentReference, setPaymentReference] = useState("");
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
-  const [givings, setGivings] = useState(props.givings);
+  const [filtered, setFiltered] = useState(false);
+  const [executed, setExecuted] = useState(false);
+  const [givings, setGivings] = useState();
+  const [displayedPayments, setDisplayedPayments] = useState();
+  const [sliceEnd, setSliceEnd] = useState(20);
+  let paymentsPerPage = 20;
+
+  const showMorePayments = () => {
+    setSliceEnd(sliceEnd + paymentsPerPage);
+    setDisplayedPayments(givings.slice(0, sliceEnd + paymentsPerPage));
+  };
+
+  const checkGivings = () => {
+    setGivings(props.givings);
+    setDisplayedPayments(props.givings.slice(0, paymentsPerPage));
+    setExecuted(true);
+  };
 
   const handleFilter = () => {
     let givings = props.givings.filter((giving) => {
@@ -53,9 +70,20 @@ function Payments(props) {
     });
 
     setGivings(givings);
-    // console.log(givings, paymentType);
-    // console.log(moment(givings[0].date.toDate()).format("L"));
-    // console.log(moment(startDate).format("L"));
+    setDisplayedPayments(givings.slice(0, paymentsPerPage));
+    setSliceEnd(paymentsPerPage);
+    setFiltered(true);
+  };
+
+  const resetFilter = () => {
+    setPaymentType("all");
+    setStartDate();
+    setEndDate();
+
+    setGivings(props.givings);
+    setDisplayedPayments(props.givings.slice(0, paymentsPerPage));
+    setSliceEnd(paymentsPerPage);
+    setFiltered(false);
   };
 
   const showPayment = (props) => {
@@ -65,6 +93,8 @@ function Payments(props) {
 
   return (
     <>
+      {/* check givings once on page load */}
+      {!props.loading && props.givings && !executed && checkGivings()}
       <div className="pageContainer">
         {/* SIDEBAR */}
         <Sidebar page="payments" {...props} />
@@ -88,12 +118,17 @@ function Payments(props) {
           <Header title={"Payment History"} {...props} />
           {/* FILTER */}
           <PaymentsFilter
+            paymentType={paymentType}
             setPaymentType={setPaymentType}
+            paymentReference={paymentReference}
+            setPaymentReference={setPaymentReference}
             startDate={startDate}
             setStartDate={setStartDate}
             endDate={endDate}
             setEndDate={setEndDate}
             handleFilter={handleFilter}
+            resetFilter={resetFilter}
+            filtered={filtered}
             totalPayments={givings && givings.length}
           />
           {/* CONTENT BODY */}
@@ -131,12 +166,7 @@ function Payments(props) {
                   <div className="transHistoryContainer d-none d-md-block">
                     {/* Payment TABLE HEAD */}
                     <div className="transHistoryCard transHistoryHeader d-flex align-items-center">
-                      {/* <div className="col-md-1 p-0">
-                        <div className="transHistoryCardIcon totalIcon">
-                          <FaHandHoldingUsd />
-                        </div>
-                      </div> */}
-                      <div className="col-md-3 p-0">Amount</div>
+                      <div className="col-md-2 p-0">Amount</div>
                       <div
                         className="col-md-3 p-0"
                         style={{
@@ -149,8 +179,8 @@ function Payments(props) {
                       >
                         User
                       </div>
-                      <div className="col-md-3 p-0">Payment Type</div>
-                      <div className="col-md-3 p-0">Paid On</div>
+                      <div className="col-md-2 p-0">Reference</div>
+                      <div className="col-md-2 p-0">Payment Type</div>
                       <div
                         className="col-md-3 p-0"
                         style={{
@@ -163,11 +193,18 @@ function Payments(props) {
                       >
                         Note
                       </div>
+                      <div className="col-md-3 p-0">Paid On</div>
                     </div>
                     {/* PaymentS LOOP */}
                     {givings &&
                       givings
+                        .filter((giving) =>
+                          giving.id
+                            .toString()
+                            .includes(paymentReference.toString())
+                        )
                         .sort((a, b) => (a.date > b.date ? -1 : 1))
+                        .slice(0, sliceEnd)
                         .map((giving) => (
                           <div
                             className="transHistoryCard d-flex align-items-center"
@@ -179,22 +216,8 @@ function Payments(props) {
                               })
                             }
                           >
-                            {/* <div className="col-2 col-md-1 p-0">
-                              <div
-                                className={
-                                  (giving.type === "tithe" &&
-                                    "transHistoryCardIcon titheIcon") ||
-                                  (giving.type === "offering" &&
-                                    "transHistoryCardIcon offeringIcon") ||
-                                  (giving.type !== ("tithe" && "offering") &&
-                                    "transHistoryCardIcon seedIcon")
-                                }
-                              >
-                                <FaHandHoldingUsd />
-                              </div>
-                            </div> */}
                             {/* Amount */}
-                            <div className="col-7 col-md-3 p-0">
+                            <div className="col-7 col-md-2 p-0">
                               <div className="transHistoryAmount transHistoryText-n">
                                 ₦{numeral(giving.amount).format("0,0")}
                               </div>
@@ -210,11 +233,15 @@ function Payments(props) {
                                     : "none",
                               }}
                             >
-                              {giving.givenBy}
+                              {giving.givenBy.fullName}
+                            </div>
+                            {/* Reference */}
+                            <div className="col-md-2 p-0 transHistoryText-n">
+                              {giving.id}
                             </div>
                             {/* Payment Type */}
-                            <div className="col-md-3 p-0 transHistoryText-n text-capitalize">
-                              {giving.type}
+                            <div className="col-md-2 p-0 transHistoryText-n text-capitalize">
+                              <span className="paymentType">{giving.type}</span>
                             </div>
                             {/* Note */}
                             <div
@@ -263,7 +290,13 @@ function Payments(props) {
                   <div className="transHistoryContainer d-md-none">
                     {givings &&
                       givings
+                        .filter((giving) =>
+                          giving.id
+                            .toString()
+                            .includes(paymentReference.toString())
+                        )
                         .sort((a, b) => (a.date > b.date ? -1 : 1))
+                        .slice(0, sliceEnd)
                         .map((giving) => (
                           <Link
                             to={{
@@ -305,6 +338,24 @@ function Payments(props) {
                           </Link>
                         ))}
                   </div>
+                </div>
+                {/* load more button */}
+                <div
+                  className="align-items-center justify-content-center mt-5 hide w-100"
+                  style={{
+                    display:
+                      displayedPayments &&
+                      givings &&
+                      displayedPayments.length !== givings.length &&
+                      "flex",
+                  }}
+                >
+                  <button
+                    className="subBtn py-2 px-3"
+                    onClick={showMorePayments}
+                  >
+                    Load More
+                  </button>
                 </div>
               </div>
             </div>
